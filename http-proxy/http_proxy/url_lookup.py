@@ -1,12 +1,35 @@
+from typing import Union
+
 from fastapi import FastAPI
+from pydantic import BaseModel
 
 app = FastAPI()
 
+fake_db = {
+    "google.com",
+    "https://fastapi.tiangolo.com/",
+    "https://facebook.com",
+    "www.agar.io"
+}
 
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
+class ProxyResponse(BaseModel):
+    url: str
+    allowed: bool = False
+    databaseLookup: str
 
-@app.get("/v1/urlinfo/")
-def read_item(resource_url_with_query_string: str):
-    return {"resource_url_with_query_string": resource_url_with_query_string}
+class Proxy:
+    def __init__(self, response = ProxyResponse):
+        self.outResponse = response
+
+    @app.get("/v1/urlinfo/", response_model = ProxyResponse)
+    async def url_lookup(resource_url_with_query_string: str):
+        database_lookup = "fake_db"
+        allowed = False
+
+        if resource_url_with_query_string in fake_db:
+            allowed = True
+        
+        return {"url" : resource_url_with_query_string,
+                "allowed" : allowed,
+                "databaseLookup" : database_lookup}
+        
