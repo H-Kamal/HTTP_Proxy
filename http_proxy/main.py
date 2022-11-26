@@ -24,7 +24,7 @@ def get_db():
 # See for details: https://code.tutsplus.com/tutorials/8-regular-expressions-you-should-know--net-6149
 def convert_to_base_URL(url : str):
     base_url = ""
-    match = re.search(r'^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$', url)
+    match = re.search(r'^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?', url)
     if match:
         if match.group(2) and match.group(3):
             base_url = match.group(2) + "." + match.group(3)
@@ -54,7 +54,7 @@ class URLApi:
     ):
         base_url = convert_to_base_URL(urlSchema.url)
         if not base_url:
-            raise HTTPException(status_code=400, details="Not a valid URL")
+            raise HTTPException(status_code=400, detail="Not a valid URL")
         
         urlSchema.url = base_url
         return crud.create_url(db=db, urlSchema=urlSchema)
