@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 
 from . import crud, models, schemas
 from .database import SessionLocal, engine
+from .fake_cache import fake_cache
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -41,6 +42,10 @@ class URLApi:
     def read_url(resource_url_with_query_string: str, db: Session = Depends(get_db)):
         # Convert the URL into the format www.google.com to match the way the POST stores into the db
         base_url = convert_to_base_URL(resource_url_with_query_string)
+        
+        # Use a cache of the worlds most popular websites instead of querying db
+        if base_url in fake_cache:
+            return {"url": base_url, "allowed": fake_cache[base_url]}
 
         db_url = crud.get_url(db, url_query = base_url)
         if db_url is None:

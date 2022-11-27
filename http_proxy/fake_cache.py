@@ -1,0 +1,11 @@
+fake_cache = { "www.google.com" : True,
+               "www.facebook.com" : True,
+               "www.youtube.com" : True,
+               "www.twitter.com" : True,
+               "www.instagram.com" : True,
+               "www.baidu.com" : True,
+               "www.wikipedia.com" : True,
+               "www.gmail.com" : True,
+               "www.yahoo.com" : True,
+               "www.popularmalware.com" : False,
+               "www.explicitmalware.com" : False,}
